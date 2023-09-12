@@ -150,6 +150,7 @@
                         console.log(error);
                     },
                     success: function (response) {
+                        console.log(response)
                         if(response.status == 'success') {
                             setTimeout(() => {
                                     Toastify({
@@ -174,10 +175,10 @@
                         } else {
                             setTimeout(() => {
                                 // set error messages
-                                $('span[name=errorMessageId]').html(response.errors.product_id[0]);
-                                $('span[name=errorMessageName]').html(response.errors.product_name[0]);
-                                $('span[name=errorMessagePrice]').html(response.errors.price[0]);
-                                $('span[name=errorMessageStocks]').html(response.errors.stocks[0]);
+                                response.errors.product_id != null ? $('span[name=errorMessageId]').html(response.errors.product_id[0]) : '';
+                                response.errors.product_name != null ? $('span[name=errorMessageName]').html(response.errors.product_name[0]) : '';
+                                response.errors.price != null ? $('span[name=errorMessagePrice]').html(response.errors.price[0]) : '';
+                                response.errors.stocks != null ? $('span[name=errorMessageStocks]').html(response.errors.stocks[0]) : '';
                                 Toastify({
                                     text: response.message,
                                     className: "info",
