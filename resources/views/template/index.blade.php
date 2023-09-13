@@ -65,35 +65,32 @@
                 $('#addModal').addClass('hidden').removeClass('flex');
             });
             // data table function
-            function getProduct() {
-                $('#tableProduct').DataTable({
-                    processing: true,
-                    serverSide: true,
-                    stateSave: true,
-                    ajax: "{{ route('product') }}",
-                    method: "GET",
-                    columns: [
-                        { data: 'product_id', name: 'product_id' },
-                        { data: 'product_name', name: 'product_name' },
-                        { data: 'price', name: 'price' },
-                        { data: 'stocks', name: 'stocks' },
-                        {
-                            render: function(data, type, full, meta) {
-                                return `
-                                <button type='button' value='${full.id}' class='btn btn-error btn-xs delete btn-active'>Delete</button>
-                                <button type='button' value='${full.id}' class='btn btn-info btn-xs edit btn-active'>Edit</button>`;
-                            }
-                        },
-                    ]
-                });
-            }
-            // run getrpoduct function on load
-            getProduct();
+            $('#tableProduct').DataTable({
+                processing: true,
+                serverSide: true,
+                stateSave: true,
+                ajax: "{{ route('product') }}",
+                method: "GET",
+                columns: [
+                    { data: 'product_id', name: 'product_id' },
+                    { data: 'product_name', name: 'product_name' },
+                    { data: 'price', name: 'price' },
+                    { data: 'stocks', name: 'stocks' },
+                    {
+                        render: function(data, type, full, meta) {
+                            return `
+                            <button type='button' value='${full.id}' class='btn btn-error btn-xs delete btn-active'>Delete</button>
+                            <button type='button' value='${full.id}' class='btn btn-info btn-xs edit btn-active'>Edit</button>`;
+                        }
+                    },
+                ]
+            });
             // delete confirmation
             const actions = document.querySelector('.data');
             actions.addEventListener('click', (event)=>{
                 event.preventDefault();
                 if(event.target.classList.contains('delete')) {
+                    // delete confirmation
                     Swal.fire({
                         title: 'Are you sure?',
                         text: "You won't be able to revert this!",
@@ -113,8 +110,7 @@
                                     // toast success
                                     success(response.message);
                                     // destroy data datatable and reinitialized
-                                    $('#tableProduct').DataTable().destroy();
-                                    getProduct();
+                                    $('#tableProduct').DataTable().ajax.reload();
                                 }
                             });
                         }
@@ -148,6 +144,10 @@
                         console.log(error);
                     },
                     success: function (response) {
+                        $('span[name=errorMessageStocks]').html("");
+                        $('span[name=errorMessagePrice]').html("");
+                        $('span[name=errorMessageName]').html("");
+                        $('span[name=errorMessageId]').html("");
                         console.log(response)
                         if(response.status == 'success') {
                             setTimeout(() => {
@@ -162,11 +162,15 @@
                                 $('#creating').addClass('hidden').removeClass('flex');
                                 $('#addModal').addClass('hidden').removeClass('flex');
                                 // destroy data datatable and reinitialized
-                                $('#tableProduct').DataTable().destroy();
-                                getProduct();
+                                $('#tableProduct').DataTable().ajax.reload();
                             }, 1000);
                         } else {
                             setTimeout(() => {
+                                // set error messages
+                                response.errors.product_id != null ? $('span[name=errorMessageId]').html(response.errors.product_id[0]) : '';
+                                response.errors.product_name != null ? $('span[name=errorMessageName]').html(response.errors.product_name[0]): '';
+                                response.errors.price != null ? $('span[name=errorMessagePrice]').html(response.errors.price[0]): '';
+                                response.errors.stocks != null ? $('span[name=errorMessageStocks]').html(response.errors.stocks[0]): '';
                                 // toast error
                                 error(response.message)
                                 // hide creating modal

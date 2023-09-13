@@ -12,13 +12,7 @@
 
     {{-- body --}}
     @yield('body')
-    
-    {{-- datatables js --}}
-    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    {{-- toastify js --}}
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    {{-- sweetalert --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     {{-- custom js --}}
     @yield('js')
     {{-- response alert --}}

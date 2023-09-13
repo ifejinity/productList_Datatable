@@ -20,7 +20,6 @@ class Controller extends BaseController
             $data = product::latest()->get();
             return datatables()->of($data)->make(true);
         }  
-        $data = product::get()->toJson();
         return view('template.index', compact('title'));
     }
     
