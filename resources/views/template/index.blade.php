@@ -5,7 +5,7 @@
         {{-- btn add --}}
         <button class="btn btn-primary btn-active mb-5" id="showAddModal">Add Product</button>
         {{-- product table --}}
-        <div class="">
+        <div>
             <table class="table rounded-none" id="tableProduct">
                 <thead>
                     <tr>
@@ -17,7 +17,7 @@
                     </tr>
                 </thead>
                 <tbody class="data">
-                    
+                    {{-- data go here --}}
                 </tbody>
             </table>
         </div>
@@ -69,6 +69,7 @@
                 $('#tableProduct').DataTable({
                     processing: true,
                     serverSide: true,
+                    stateSave: true,
                     ajax: "{{ route('product') }}",
                     method: "GET",
                     columns: [
@@ -78,17 +79,21 @@
                         { data: 'stocks', name: 'stocks' },
                         {
                             render: function(data, type, full, meta) {
-                                return `<button type='button' value='${full.id}' class='btn btn-error btn-xs delete btn-active'>Delete</button>`
+                                return `
+                                <button type='button' value='${full.id}' class='btn btn-error btn-xs delete btn-active'>Delete</button>
+                                <button type='button' value='${full.id}' class='btn btn-info btn-xs edit btn-active'>Edit</button>`;
                             }
                         },
                     ]
                 });
             }
+            // run getrpoduct function on load
+            getProduct();
             // delete confirmation
-            const deleteBtn = document.querySelector('.data');
-            deleteBtn.addEventListener('click', (event)=>{
+            const actions = document.querySelector('.data');
+            actions.addEventListener('click', (event)=>{
                 event.preventDefault();
-                if(event.target.classList.contains('delete')){
+                if(event.target.classList.contains('delete')) {
                     Swal.fire({
                         title: 'Are you sure?',
                         text: "You won't be able to revert this!",
@@ -115,9 +120,10 @@
                         }
                     })
                 }
+                if (event.target.classList.contains('edit')) {
+
+                }
             })
-            // run getrpoduct function on load
-            getProduct();
             // add product
             $("#create").click(function (e) { 
                 e.preventDefault();
@@ -136,10 +142,7 @@
                     beforeSend: function () {
                         // show creating display and reset error messages
                         $('#creating').addClass('flex').removeClass('hidden');
-                        $('span[name=errorMessageId]').html("");
-                        $('span[name=errorMessageName]').html("");
-                        $('span[name=errorMessagePrice]').html("");
-                        $('span[name=errorMessageStocks]').html("");
+    
                     },
                     error: function (error) { 
                         console.log(error);
@@ -164,11 +167,6 @@
                             }, 1000);
                         } else {
                             setTimeout(() => {
-                                // set error messages
-                                response.errors.product_id != null ? $('span[name=errorMessageId]').html(response.errors.product_id[0]) : '';
-                                response.errors.product_name != null ? $('span[name=errorMessageName]').html(response.errors.product_name[0]) : '';
-                                response.errors.price != null ? $('span[name=errorMessagePrice]').html(response.errors.price[0]) : '';
-                                response.errors.stocks != null ? $('span[name=errorMessageStocks]').html(response.errors.stocks[0]) : '';
                                 // toast error
                                 error(response.message)
                                 // hide creating modal

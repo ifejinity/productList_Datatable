@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ $title }}</title>
+    {{-- cdn --}}
     @include('partials.__cdn')
 </head>
 <body class="w-full md:px-[10%] px-[5%] bg-indigo-400 min-h-screen flex justify-center items-center">
 
+    {{-- body --}}
     @yield('body')
     
     {{-- datatables js --}}
@@ -19,8 +21,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- custom js --}}
     @yield('js')
+    {{-- response alert --}}
     <script>
-        // response alert
         function success(message) {
             Toastify({
                 text: message,
