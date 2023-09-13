@@ -105,13 +105,8 @@
                                 url: "{{ route('delete') }}",
                                 data: {id:event.target.value},
                                 success: function (response) {
-                                    Toastify({
-                                        text: "Delete success",
-                                        className: "info",
-                                        style: {
-                                            background: "#22c55e",
-                                        }
-                                    }).showToast();
+                                    // toast success
+                                    success(response.message);
                                     // destroy data datatable and reinitialized
                                     $('#tableProduct').DataTable().destroy();
                                     getProduct();
@@ -153,13 +148,8 @@
                         console.log(response)
                         if(response.status == 'success') {
                             setTimeout(() => {
-                                    Toastify({
-                                    text: response.message,
-                                    className: "info",
-                                    style: {
-                                        background: "#22c55e",
-                                    }
-                                }).showToast();
+                                // toast success
+                                success(response.message)
                                 // reset inputs value
                                 $('input[name=id]').val("");
                                 $('input[name=name]').val("");
@@ -179,13 +169,8 @@
                                 response.errors.product_name != null ? $('span[name=errorMessageName]').html(response.errors.product_name[0]) : '';
                                 response.errors.price != null ? $('span[name=errorMessagePrice]').html(response.errors.price[0]) : '';
                                 response.errors.stocks != null ? $('span[name=errorMessageStocks]').html(response.errors.stocks[0]) : '';
-                                Toastify({
-                                    text: response.message,
-                                    className: "info",
-                                    style: {
-                                        background: "#ef4444",
-                                    }
-                                }).showToast();
+                                // toast error
+                                error(response.message)
                                 // hide creating modal
                                 $('#creating').addClass('hidden').removeClass('flex');
                             }, 1000);

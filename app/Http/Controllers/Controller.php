@@ -26,23 +26,23 @@ class Controller extends BaseController
     
     public function create(Request $request) {
         $validator = Validator::make($request->all(), [
-            'product_id' => 'required|numeric',
+            'product_id' => 'required|numeric|unique:products,product_id',
             'product_name' => 'required',
-            'price' => 'required',
+            'price' => 'required|numeric',
             'stocks' => 'required|numeric'
         ]);
         if($validator->fails()) {
             return response()->json(['status'=>'error', 'message'=>'Failed to add products.', 'errors'=>$validator->errors()]);
         } else {
             $data = $request->all();
-            $new = product::create($data);
-            return response()->json(['status'=>'success',   'message'=>'Product added.', 'new'=>$new]);
+            product::create($data);
+            return response()->json(['status'=>'success', 'message'=>'Product added.']);
         }
     }
 
     public function delete(Request $request) {
         $toDelete = product::findOrFail($request->id);
         $toDelete->delete();
-        return redirect()->route('product');
+        return response()->json(['message'=>'Delete success.']);
     }
 }

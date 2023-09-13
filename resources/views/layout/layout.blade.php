@@ -19,5 +19,26 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{-- custom js --}}
     @yield('js')
+    <script>
+        // response alert
+        function success(message) {
+            Toastify({
+                text: message,
+                className: "info",
+                style: {
+                    background: "#22c55e",
+                }
+            }).showToast();
+        }
+        function error(message) {
+            Toastify({
+                text: message,
+                className: "info",
+                style: {
+                    background: "#ef4444",
+                }
+            }).showToast();
+        }
+    </script>
 </body>
 </html>
